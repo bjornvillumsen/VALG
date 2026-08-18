@@ -1,0 +1,901 @@
+<!--
+  VALG — Frontdoor V3 (ét-fil, tresproget)
+  ------------------------------------------------------------------
+  Funnel → metafor (vægtrum) → tillid + CTA.
+  Sprog skiftes med knapperne øverst (DA / EN / NO). Dansk er standard.
+  Teams-linket sidder i "Start træning"-knappen (et <a href> i bookend-sektionen).
+-->
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VALG — et træningsrum for dine relationer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#E7E3DC;
+    --paper-2:#EEEBE5;
+    --ink:#23222A;
+    --ink-soft:#4A4854;
+    --dusk:#2C2A35;
+    --dusk-ink:#D8D3CA;
+    --dusk-bright:#ECE8E0;
+    --honey:#C28A3A;
+    --honey-deep:#A06F26;
+    --line:#CBC5BB;
+    --maxw:760px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:18px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+  .display{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.12;letter-spacing:-0.01em}
+  .eyebrow{
+    font-size:13px;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--ink-soft);font-weight:600;margin:0 0 18px
+  }
+
+  .hero{position:relative;padding:120px 0 92px;overflow:hidden}
+  .langbar{position:absolute;top:22px;right:28px;z-index:5;display:flex;gap:14px}
+  .langbar button{
+    background:none;border:none;cursor:pointer;padding:0;
+    font-family:"Hanken Grotesk",sans-serif;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+    color:var(--ink-soft);transition:color .2s ease
+  }
+  .langbar button:hover{color:var(--honey-deep)}
+  .langbar button.active{color:var(--ink)}
+  .langbar button:focus-visible{outline:2px solid var(--honey-deep);outline-offset:3px}
+  .langbar-report{
+    font-family:"Hanken Grotesk",sans-serif;
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+    color:var(--honey-deep);text-decoration:none;transition:color .2s ease
+  }
+  .langbar-report:hover{color:var(--ink)}
+  .langbar-report:focus-visible{outline:2px solid var(--honey-deep);outline-offset:3px}
+  .langbar-sep{width:1px;height:14px;background:var(--ink-soft);opacity:.35;align-self:center}
+  .hero h1{
+    position:relative;z-index:2;
+    font-size:clamp(34px,6.2vw,58px);
+    margin:0 0 28px;max-width:14ch
+  }
+  .hero .sub{position:relative;z-index:2;color:var(--ink-soft);font-size:20px;max-width:36ch}
+  .hero .sub .lead{display:block}
+  .hero .sub .turn{display:block;color:var(--ink);margin-top:10px;font-weight:500}
+
+  section{padding:76px 0}
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .recog .eyebrow{margin-bottom:26px}
+  .recog ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .recog li{
+    font-family:"Fraunces",serif;font-size:clamp(20px,3.3vw,26px);font-weight:400;
+    padding:20px 4px;border-bottom:1px solid var(--line);color:var(--ink);
+    transition:padding-left .3s ease,color .3s ease
+  }
+  .recog li:hover{padding-left:14px}
+  .pivot{
+    font-family:"Fraunces",serif;font-weight:500;
+    font-size:clamp(24px,4.4vw,34px);line-height:1.25;
+    margin:52px 0 0;max-width:24ch
+  }
+
+  .what{background:var(--dusk);color:var(--dusk-ink)}
+  .what .eyebrow{color:#9a93a6}
+  .what p{font-family:"Fraunces",serif;font-size:clamp(22px,3.8vw,30px);line-height:1.35;margin:0;max-width:24ch;color:var(--dusk-ink)}
+  .what p span{display:block}
+
+  .value .stack{font-family:"Fraunces",serif;font-size:clamp(22px,3.8vw,30px);line-height:1.3;margin:0 0 6px}
+  .value .stack b{font-weight:600}
+  .value .gets{list-style:none;margin:18px 0 0;padding:0}
+  .value .gets li{
+    font-family:"Fraunces",serif;font-size:clamp(20px,3.4vw,27px);font-weight:400;
+    padding:10px 0 10px 26px;position:relative;color:var(--ink)
+  }
+  .value .gets li::before{content:"";position:absolute;left:0;top:.95em;width:12px;height:1px;background:var(--ink-soft)}
+  .seeing{
+    margin:34px 0 0;font-size:20px;line-height:1.5;max-width:44ch;color:var(--ink)
+  }
+  .seeing .mark{
+    background-image:linear-gradient(transparent 62%,rgba(194,138,58,.35) 62%);
+    padding:0 2px
+  }
+  .disarm{margin:18px 0 0;color:var(--ink-soft);font-size:17px;max-width:46ch}
+
+  .ex .eyebrow{margin-bottom:24px}
+  .cards{display:grid;gap:14px}
+  .card{
+    background:var(--paper-2);border:1px solid var(--line);border-radius:14px;
+    padding:20px 22px;transition:transform .25s ease,border-color .25s ease
+  }
+  .card:hover{transform:translateY(-3px);border-color:#b9b2a6}
+  .card .tag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--honey-deep);font-weight:600;display:block;margin-bottom:8px}
+  .card .q{font-family:"Fraunces",serif;font-size:20px;line-height:1.35;color:var(--ink)}
+  .own{margin:22px 0 0;color:var(--ink-soft);font-size:17px}
+
+  /* metafor */
+  .bridge{background:var(--dusk);color:var(--dusk-ink);text-align:center;padding:104px 0 96px}
+  .bridge .kicker{
+    font-family:"Fraunces",serif;font-style:italic;font-weight:400;
+    font-size:clamp(19px,3vw,24px);color:#9a93a6;margin:0 0 34px
+  }
+  .bridge h2{
+    font-family:"Fraunces",serif;font-weight:500;line-height:1.08;letter-spacing:-0.015em;
+    font-size:clamp(30px,5.4vw,50px);color:var(--dusk-bright);
+    margin:0 auto;max-width:20ch
+  }
+  .bridge .sub{
+    margin:26px auto 0;max-width:48ch;color:var(--dusk-ink);
+    font-size:clamp(17px,2.3vw,21px);line-height:1.55
+  }
+  .bridge .sub b{color:var(--dusk-bright);font-weight:500}
+
+  .barbell{display:flex;align-items:center;justify-content:center;gap:0;
+    width:min(320px,66%);margin:0 auto 34px}
+  .barbell .plate{display:block;border-radius:1px;background:var(--dusk-ink)}
+  .barbell .bar{display:block;flex:1;height:6px;background:var(--honey)}
+  .barbell .p1{width:9px;height:28px}
+  .barbell .p2{width:11px;height:44px;margin:0 3px}
+  .barbell .p3{width:13px;height:62px}
+
+  .truths .eyebrow{margin-bottom:40px}
+  .truth-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px 48px}
+  .truth h3{
+    font-family:"Fraunces",serif;font-weight:500;
+    font-size:clamp(21px,2.7vw,27px);line-height:1.15;letter-spacing:-.01em;margin:0 0 10px
+  }
+  .truth p{color:var(--ink-soft);font-size:17px;margin:0;max-width:40ch}
+
+  .areas .eyebrow{margin-bottom:38px}
+  .area-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px 48px}
+  .area .word{
+    font-family:"Fraunces",serif;font-weight:500;font-size:22px;margin-bottom:10px;
+    padding-bottom:9px;border-bottom:2px solid var(--honey);display:inline-block
+  }
+  .area p{color:var(--ink-soft);font-size:16px;line-height:1.5;margin:0}
+
+  .trust{border-top:1px solid var(--line);padding:44px 0 76px}
+  .trust details{max-width:58ch}
+  .trust summary{
+    cursor:pointer;list-style:none;font-weight:600;color:var(--ink-soft);
+    font-size:15px;display:inline-flex;align-items:center;gap:8px
+  }
+  .trust summary::-webkit-details-marker{display:none}
+  .trust summary::after{content:"+";color:var(--honey-deep);font-size:18px;line-height:1}
+  .trust details[open] summary::after{content:"–"}
+  .trust .body{margin-top:16px;color:var(--ink-soft);font-size:16px;line-height:1.6}
+  .trust .body em{color:var(--ink);font-style:normal;font-weight:500}
+
+  .bookend{background:var(--dusk);color:var(--dusk-ink);text-align:center;padding:88px 0 84px}
+  .bookend .tagline{
+    font-family:"Fraunces",serif;font-weight:500;line-height:1.18;
+    font-size:clamp(26px,4.4vw,40px);color:var(--dusk-bright);
+    max-width:20ch;margin:0 auto 34px
+  }
+  .btn{
+    display:inline-block;text-decoration:none;text-align:center;
+    font-family:"Hanken Grotesk",sans-serif;font-size:18px;font-weight:600;
+    border:none;border-radius:999px;padding:16px 32px;cursor:pointer;
+    transition:transform .15s ease,background .2s ease
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--honey);color:#fff}
+  .btn-primary:hover{background:var(--honey-deep)}
+  .bookend .teams{margin:16px 0 0;font-size:14px;color:#9a93a6;letter-spacing:.02em}
+  .bookend .gdpr{margin:6px 0 0;font-size:13px;color:#9a93a6;opacity:.85}
+
+  footer{padding:34px 0 60px;color:var(--ink-soft);font-size:13px;letter-spacing:.04em}
+
+  :focus-visible{outline:2px solid var(--honey-deep);outline-offset:3px}
+  .bridge :focus-visible,.bookend :focus-visible{outline-color:var(--honey)}
+
+  @media (max-width:560px){
+    body{font-size:17px}
+    .hero{padding:88px 0 64px}
+    section{padding:60px 0}
+    .truth-grid{grid-template-columns:1fr;gap:32px}
+    .area-grid{grid-template-columns:1fr 1fr;gap:28px 24px}
+    .bridge{padding:80px 0 72px}
+  }
+  @media (max-width:400px){
+    .area-grid{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{transition:none;opacity:1;transform:none}
+    .vpreview-overlay,.vpreview{transition:none}
+  }
+
+  /* SÅDAN FOREGÅR DET (proces) */
+  .steps .eyebrow{margin-bottom:28px}
+  .steps ol{list-style:none;counter-reset:step;margin:0;padding:0}
+  .steps li{
+    counter-increment:step;position:relative;
+    padding:18px 0 18px 54px;border-top:1px solid var(--line);
+    font-size:clamp(17px,2.4vw,20px);color:var(--ink);line-height:1.5
+  }
+  .steps li:last-child{border-bottom:1px solid var(--line)}
+  .steps li::before{
+    content:counter(step);position:absolute;left:0;top:15px;
+    width:32px;height:32px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Fraunces",serif;font-size:16px;font-weight:500;
+    color:var(--honey-deep);border:1px solid var(--honey)
+  }
+  .steps li b{font-weight:600}
+
+  /* eksempel-kort er nu klikbare (preview) */
+  .card{cursor:pointer}
+  .card:focus-visible{outline:2px solid var(--honey-deep);outline-offset:3px}
+  .card .hint{
+    display:block;margin-top:12px;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:600;color:var(--honey-deep);
+    opacity:.65;transition:opacity .2s ease
+  }
+  .card:hover .hint,.card:focus-visible .hint{opacity:1}
+
+  /* trænings-loop linje i bookend */
+  .bookend .loop{
+    font-family:"Fraunces",serif;font-style:italic;font-weight:400;
+    font-size:clamp(18px,2.6vw,22px);color:var(--dusk-ink);
+    margin:0 auto 28px;max-width:26ch;opacity:.9
+  }
+
+  /* PREVIEW MODAL */
+  .vpreview-overlay{
+    position:fixed;inset:0;z-index:50;
+    background:rgba(22,21,27,.55);
+    display:none;align-items:center;justify-content:center;
+    padding:24px;opacity:0;transition:opacity .2s ease
+  }
+  .vpreview-overlay.open{display:flex;opacity:1}
+  .vpreview{
+    background:var(--paper-2);color:var(--ink);
+    border:1px solid var(--line);border-radius:18px;
+    max-width:540px;width:100%;max-height:88vh;overflow:auto;
+    padding:34px 32px 30px;position:relative;
+    transform:translateY(10px);transition:transform .2s ease;
+    box-shadow:0 24px 60px rgba(22,21,27,.28)
+  }
+  .vpreview-overlay.open .vpreview{transform:none}
+  .vpreview .close{
+    position:absolute;top:14px;right:14px;
+    background:none;border:none;cursor:pointer;
+    width:36px;height:36px;border-radius:999px;
+    font-size:22px;line-height:1;color:var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;transition:background .2s ease,color .2s ease
+  }
+  .vpreview .close:hover{background:var(--paper);color:var(--ink)}
+  .vpreview .tag{
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--honey-deep);font-weight:600;display:block;margin-bottom:10px
+  }
+  .vpreview h3{
+    font-family:"Fraunces",serif;font-weight:500;
+    font-size:clamp(21px,3.4vw,26px);line-height:1.2;
+    margin:0 0 22px;max-width:26ch;padding-right:30px
+  }
+  .vpreview .row{margin:0 0 18px}
+  .vpreview .row .lbl{
+    display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    font-weight:600;color:var(--ink-soft);margin-bottom:5px
+  }
+  .vpreview .row p{margin:0;font-size:16px;line-height:1.5;color:var(--ink)}
+  .vpreview .frame{
+    margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);
+    font-size:14px;color:var(--ink-soft);line-height:1.5
+  }
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     BEVÆGELSE 1 — FUNNEL
+     ===================================================================== -->
+<header class="hero">
+  <nav class="langbar" aria-label="Sprog / Language">
+    <a class="langbar-report" href="valg_rapport_indsaet.html" data-i18n="report_link">Rapport</a>
+    <span class="langbar-sep" aria-hidden="true"></span>
+    <button data-lang="da" class="active">DA</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="no">NO</button>
+  </nav>
+  <div class="wrap">
+    <h1 class="display" data-i18n="hero_h1">Når noget bliver ved med at ske i dine relationer</h1>
+    <p class="sub">
+      <span class="lead" data-i18n="hero_lead">Du prøver at forklare. Du prøver igen. Du giver lidt mere.</span>
+      <span class="turn" data-i18n="hero_turn">Men noget i situationen ændrer sig ikke.</span>
+    </p>
+  </div>
+</header>
+
+<!-- GENKENDELSE -->
+<section class="recog">
+  <div class="wrap reveal">
+    <p class="eyebrow" data-i18n="recog_eyebrow">Måske kender du det her</p>
+    <ul>
+      <li data-i18n="recog_li1">En samtale, der kører i ring</li>
+      <li data-i18n="recog_li2">Noget du går og tænker på bagefter</li>
+      <li data-i18n="recog_li3">En irritation eller uro, der bliver hængende</li>
+      <li data-i18n="recog_li4">At du prøver at få kontakt — men det virker ikke</li>
+    </ul>
+    <p class="pivot display" data-i18n="pivot">Det er ikke situationerne, der er problemet. Det er, hvad der sker i dem.</p>
+  </div>
+</section>
+
+<!-- HVAD ER DET -->
+<section class="what">
+  <div class="wrap reveal">
+    <p class="eyebrow" data-i18n="what_eyebrow">Hvad er det her?</p>
+    <p>
+      <span data-i18n="what_1">VALG er et træningsrum.</span>
+      <span data-i18n="what_2">Situationen bliver ikke løst.</span>
+      <span data-i18n="what_3">Du ser tydeligere, hvad du selv gør.</span>
+      <span data-i18n="what_4">Du går ind i en konkret situation.</span>
+      <span data-i18n="what_5">Du svarer på, hvad du gør.</span>
+      <span data-i18n="what_6">Og du ser, hvad det fører til.</span>
+    </p>
+  </div>
+</section>
+
+<!-- SÅDAN FOREGÅR DET -->
+<section class="steps">
+  <div class="wrap reveal">
+    <p class="eyebrow" data-i18n="steps_label">Sådan foregår det</p>
+    <ol>
+      <li data-i18n="step_1">Du beskriver kort en situation, hvor noget i en relation bliver ved med at ramme dig.</li>
+      <li data-i18n="step_2">VALG laver flere konkrete scenarier — du vælger det, der ligger tættest på.</li>
+      <li data-i18n="step_3">Du går ind i samtalen og svarer, som du faktisk ville svare.</li>
+      <li data-i18n="step_4">Bagefter får du feedback på det mønster, der blev synligt, da det pressede.</li>
+      <li data-i18n="step_5">Så vælger du selv, hvad der skal ske: prøv scenariet igen, tag et af de andre, beskriv en ny situation — eller stop.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- VÆRDI -->
+<section class="value">
+  <div class="wrap reveal">
+    <p class="eyebrow" data-i18n="value_eyebrow">Hvad får du ud af det?</p>
+    <p class="stack" data-i18n-html="value_stack"><b>Du får en tydeligere oplevelse af —</b></p>
+    <ul class="gets">
+      <li data-i18n="gets_1">hvad du gør</li>
+      <li data-i18n="gets_2">hvad det fører til</li>
+      <li data-i18n="gets_3">hvad det koster</li>
+    </ul>
+    <p class="seeing" data-i18n-html="seeing">Du opdager, hvad du gør i situationen – <span class="mark">mens den er i gang</span>. Og når du ser det, mens det sker, fylder det mindre bagefter.</p>
+    <p class="disarm" data-i18n="disarm">Ingen færdige svar. Ingen løsning, du skal følge. Situationerne forsvinder ikke — men de behøver ikke ramme dig på samme måde. Det kan føles ubehageligt eller mere direkte, end du havde ventet. Det er en del af træningen.</p>
+  </div>
+</section>
+
+<!-- EKSEMPLER -->
+<section class="ex">
+  <div class="wrap reveal">
+    <p class="eyebrow" data-i18n="ex_eyebrow">Eksempler på situationer</p>
+    <div class="cards">
+      <div class="card" role="button" tabindex="0" data-preview="p1" aria-haspopup="dialog"><span class="tag" data-i18n="card_tag1">Partner</span><p class="q" data-i18n="card_q1">Min partner trækker sig, og jeg prøver at få kontakt.</p><span class="hint" data-i18n="card_hint">Se et typisk forløb</span></div>
+      <div class="card" role="button" tabindex="0" data-preview="p2" aria-haspopup="dialog"><span class="tag" data-i18n="card_tag2">Arbejde</span><p class="q" data-i18n="card_q2">Min chef svarer ikke, og jeg begynder at forklare mere.</p><span class="hint" data-i18n="card_hint">Se et typisk forløb</span></div>
+      <div class="card" role="button" tabindex="0" data-preview="p3" aria-haspopup="dialog"><span class="tag" data-i18n="card_tag3">Familie</span><p class="q" data-i18n="card_q3">Min mor siger noget, og jeg mærker mig selv blive lille.</p><span class="hint" data-i18n="card_hint">Se et typisk forløb</span></div>
+      <div class="card" role="button" tabindex="0" data-preview="p4" aria-haspopup="dialog"><span class="tag" data-i18n="card_tag4">Ven</span><p class="q" data-i18n="card_q4">En samtale går skævt, og jeg prøver at rette den op.</p><span class="hint" data-i18n="card_hint">Se et typisk forløb</span></div>
+    </div>
+    <p class="own" data-i18n="own">Klik på et eksempel for at se et typisk forløb. Din egen situation tager du med, når du starter.</p>
+  </div>
+</section>
+
+<!-- =====================================================================
+     BEVÆGELSE 2 — METAFOR (vægtrum)
+     ===================================================================== -->
+<section class="bridge">
+  <div class="wrap reveal">
+    <p class="kicker" data-i18n="kicker">Så hvordan træner man det?</p>
+    <div class="barbell" aria-hidden="true">
+      <span class="plate p1"></span><span class="plate p2"></span><span class="plate p3"></span>
+      <span class="bar"></span>
+      <span class="plate p3"></span><span class="plate p2"></span><span class="plate p1"></span>
+    </div>
+    <h2 data-i18n="bridge_h2">Tænk på det som fitness. Bare for hvordan du fungerer i en situation, hvor en konflikt i en relation ikke giver sig.</h2>
+    <p class="sub" data-i18n-html="bridge_sub">Her er situationen <b>vægtstangen</b>. Du løser den ikke, og du vinder ikke over den. Du finder ud af, hvor meget vægt du kan holde til at løfte.</p>
+  </div>
+</section>
+
+<!-- GYM-SANDHEDER -->
+<section class="truths">
+  <div class="wrap reveal">
+    <p class="eyebrow" data-i18n="truths_label">Det fungerer som vægttræning</p>
+    <div class="truth-grid">
+      <div class="truth">
+        <h3 data-i18n="t1_h">Vægtstangen skal være tung.</h3>
+        <p data-i18n="t1_p">Hvis intet presser, træner du ingenting. Modstanden er ikke en fejl — den er hele pointen.</p>
+      </div>
+      <div class="truth">
+        <h3 data-i18n="t2_h">Ingen løfter den for dig.</h3>
+        <p data-i18n="t2_p">Ingen råd, ingen vejledning og intet facit. Du mærker selv belastningen.</p>
+      </div>
+      <div class="truth">
+        <h3 data-i18n="t3_h">Vægtstangen ændrer sig ikke. Det gør du.</h3>
+        <p data-i18n="t3_p">Situationen flytter sig ikke udadtil. Det, der flytter sig, er hvad du kan håndtere.</p>
+      </div>
+      <div class="truth">
+        <h3 data-i18n="t4_h">Du vinder ikke over en vægtstang.</h3>
+        <p data-i18n="t4_p">Det handler ikke om at få ret eller om at løse det. Det handler om, hvad du kan håndtere, når presset er på.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIRE TING DER BELASTES -->
+<section class="areas">
+  <div class="wrap reveal">
+    <p class="eyebrow" data-i18n="areas_label">Belastningen rammer fire steder</p>
+    <div class="area-grid">
+      <div class="area">
+        <span class="word" data-i18n="a1_w">Position</span>
+        <p data-i18n="a1_p">Om du kan blive ved med at være dig, mens nogen vil have noget andet.</p>
+      </div>
+      <div class="area">
+        <span class="word" data-i18n="a2_w">Ro</span>
+        <p data-i18n="a2_p">Om uroen kører dig, eller du kan fungere med den.</p>
+      </div>
+      <div class="area">
+        <span class="word" data-i18n="a3_w">Respons</span>
+        <p data-i18n="a3_p">Om du vælger, hvordan du handler, eller det bare sker automatisk.</p>
+      </div>
+      <div class="area">
+        <span class="word" data-i18n="a4_w">Udholdenhed</span>
+        <p data-i18n="a4_p">Hvor længe du holder, før du trækker dig, presser eller lukker ned.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     BEVÆGELSE 3 — TILLID + CTA
+     ===================================================================== -->
+<section class="trust">
+  <div class="wrap reveal">
+    <details>
+      <summary data-i18n="trust_summary">Hvad bygger det på?</summary>
+      <div class="body" data-i18n-html="trust_body">
+        VALG er ikke bare en chatbot, der finder på. Træningen bygger på et anerkendt
+        psykologisk arbejde om, hvordan vi regulerer os selv i tætte relationer. Det kaldte
+        psykologen David Schnarch <em>differentiering</em>: at blive ved med at være dig selv,
+        også når en relation presser. Du behøver ikke kende teorien for at bruge VALG — den
+        ligger under, ikke ovenpå.
+      </div>
+    </details>
+  </div>
+</section>
+
+<section class="bookend">
+  <div class="wrap reveal">
+    <p class="loop" data-i18n="loop">Første gang ser du mønstret. Næste gang træner du med det.</p>
+    <p class="tagline" data-i18n="foot_tag">Det lover dig ingenting. Det giver dig modstand.</p>
+    <!-- Teams-link. Skift adressen her, hvis agentens link ændrer sig. -->
+    <a class="btn btn-primary" id="start"
+       href="https://teams.microsoft.com/l/app/?titleId=T_b5e70388-0a7f-949a-c21e-e7365a639cb5"
+       target="_blank" rel="noopener" data-i18n="cta_label">Start træning</a>
+    <p class="teams" data-i18n="teams">Åbner i Microsoft Teams</p>
+    <p class="gdpr" data-i18n="gdpr">Til sidst bliver du bedt om en kort evaluering — og du vælger selv, om dine svar gemmes.</p>
+  </div>
+</section>
+
+<footer><div class="wrap" data-i18n="footer_micro">VALG · et træningsrum</div></footer>
+
+<!-- PREVIEW MODAL -->
+<div class="vpreview-overlay" id="vpreview" hidden>
+  <div class="vpreview" role="dialog" aria-modal="true" aria-labelledby="vpreview-title">
+    <button class="close" id="vpreview-close" type="button" aria-label="Luk">&times;</button>
+    <span class="tag" id="vpreview-tag"></span>
+    <h3 id="vpreview-title"></h3>
+    <div id="vpreview-body"></div>
+    <p class="frame" id="vpreview-frame"></p>
+  </div>
+</div>
+
+<script>
+  /* ====== Tresproget copy ====== */
+  const STR = {
+    da:{
+      title:"VALG — et træningsrum for dine relationer",
+      hero_h1:"Når noget bliver ved med at ske i dine relationer",
+      hero_lead:"Du prøver at forklare. Du prøver igen. Du giver lidt mere.",
+      hero_turn:"Men noget i situationen ændrer sig ikke.",
+      recog_eyebrow:"Måske kender du det her",
+      recog_li1:"En samtale, der kører i ring",
+      recog_li2:"Noget du går og tænker på bagefter",
+      recog_li3:"En irritation eller uro, der bliver hængende",
+      recog_li4:"At du prøver at få kontakt — men det virker ikke",
+      pivot:"Det er ikke situationerne, der er problemet. Det er, hvad der sker i dem.",
+      what_eyebrow:"Hvad er det her?",
+      what_1:"VALG er et træningsrum.",
+      what_2:"Situationen bliver ikke løst.",
+      what_3:"Du ser tydeligere, hvad du selv gør.",
+      what_4:"Du går ind i en konkret situation.",
+      what_5:"Du svarer på, hvad du gør.",
+      what_6:"Og du ser, hvad det fører til.",
+      value_eyebrow:"Hvad får du ud af det?",
+      value_stack:"<b>Du får en tydeligere oplevelse af —</b>",
+      gets_1:"hvad du gør",
+      gets_2:"hvad det fører til",
+      gets_3:"hvad det koster",
+      seeing:"Du opdager, hvad du gør i situationen – <span class=\"mark\">mens den er i gang</span>. Og når du ser det, mens det sker, fylder det mindre bagefter.",
+      disarm:"Ingen færdige svar. Ingen løsning, du skal følge. Situationerne forsvinder ikke — men de behøver ikke ramme dig på samme måde. Det kan føles ubehageligt eller mere direkte, end du havde ventet. Det er en del af træningen.",
+      ex_eyebrow:"Eksempler på situationer",
+      card_tag1:"Partner", card_q1:"Min partner trækker sig, og jeg prøver at få kontakt.",
+      card_tag2:"Arbejde", card_q2:"Min chef svarer ikke, og jeg begynder at forklare mere.",
+      card_tag3:"Familie", card_q3:"Min mor siger noget, og jeg mærker mig selv blive lille.",
+      card_tag4:"Ven", card_q4:"En samtale går skævt, og jeg prøver at rette den op.",
+      own:"Du kan tage din egen situation med — eller vælge en.",
+      kicker:"Så hvordan træner man det?",
+      bridge_h2:"Tænk på det som fitness. Bare for hvordan du fungerer i en situation, hvor en konflikt i en relation ikke giver sig.",
+      bridge_sub:"Her er situationen <b>vægtstangen</b>. Du løser den ikke, og du vinder ikke over den. Du finder ud af, hvor meget vægt du kan holde til at løfte.",
+      truths_label:"Det fungerer som vægttræning",
+      t1_h:"Vægtstangen skal være tung.",
+      t1_p:"Hvis intet presser, træner du ingenting. Modstanden er ikke en fejl — den er hele pointen.",
+      t2_h:"Ingen løfter den for dig.",
+      t2_p:"Ingen råd, ingen vejledning og intet facit. Du mærker selv belastningen.",
+      t3_h:"Vægtstangen ændrer sig ikke. Det gør du.",
+      t3_p:"Situationen flytter sig ikke udadtil. Det, der flytter sig, er hvad du kan håndtere.",
+      t4_h:"Du vinder ikke over en vægtstang.",
+      t4_p:"Det handler ikke om at få ret eller om at løse det. Det handler om, hvad du kan håndtere, når presset er på.",
+      areas_label:"Belastningen rammer fire steder",
+      a1_w:"Position", a1_p:"Om du kan blive ved med at være dig, mens nogen vil have noget andet.",
+      a2_w:"Ro", a2_p:"Om uroen kører dig, eller du kan fungere med den.",
+      a3_w:"Respons", a3_p:"Om du vælger, hvordan du handler, eller det bare sker automatisk.",
+      a4_w:"Udholdenhed", a4_p:"Hvor længe du holder, før du trækker dig, presser eller lukker ned.",
+      trust_summary:"Hvad bygger det på?",
+      trust_body:"VALG er ikke bare en chatbot, der finder på. Træningen bygger på et anerkendt psykologisk arbejde om, hvordan vi regulerer os selv i tætte relationer. Det kaldte psykologen David Schnarch <em>differentiering</em>: at blive ved med at være dig selv, også når en relation presser. Du behøver ikke kende teorien for at bruge VALG — den ligger under, ikke ovenpå.",
+      foot_tag:"Det lover dig ingenting. Det giver dig modstand.",
+      cta_label:"Start træning",
+      report_link:"Rapport",
+      teams:"Åbner i Microsoft Teams",
+      gdpr:"Til sidst bliver du bedt om en kort evaluering — og du vælger selv, om dine svar gemmes.",
+      footer_micro:"VALG · et træningsrum",
+      steps_label:"Sådan foregår det",
+      step_1:"Du beskriver kort en situation, hvor noget i en relation bliver ved med at ramme dig.",
+      step_2:"VALG laver flere konkrete scenarier — du vælger det, der ligger tættest på.",
+      step_3:"Du går ind i samtalen og svarer, som du faktisk ville svare.",
+      step_4:"Bagefter får du feedback på det mønster, der blev synligt, da det pressede.",
+      step_5:"Så vælger du selv, hvad der skal ske: prøv scenariet igen, tag et af de andre, beskriv en ny situation — eller stop.",
+      loop:"Første gang ser du mønstret. Næste gang træner du med det.",
+      card_hint:"Se et typisk forløb",
+      prev_l1:"Et scenarie, VALG kunne lave",
+      prev_l2:"Hvad der presser",
+      prev_l3:"Hvad feedbacken kunne pege på",
+      prev_frame:"Et eksempel på et typisk forløb. Din egen situation tager du med, når du starter.",
+      prev_close:"Luk",
+      previews:{
+        p1:{
+          t:"Min partner trækker sig, og jeg prøver at få kontakt.",
+          s1:"I sidder efter en dårlig aften. Du spørger, hvad der er galt. Din partner svarer kort og kigger væk.",
+          s2:"Jo mere du prøver at nå ind, jo mere lukker den anden. Du mærker trangen til at forklare, spørge igen, give lidt mere.",
+          s3:"Om du kan blive stående i dig selv, når kontakten ikke kommer — eller om dit svar bliver styret af den andens tilbagetrækning."
+        },
+        p2:{
+          t:"Min chef svarer ikke, og jeg begynder at forklare mere.",
+          s1:"Du har sendt et oplæg. Der går dage. Til mødet nævner din chef det slet ikke.",
+          s2:"Stilheden fylder. Du mærker trangen til at uddybe, retfærdiggøre, sikre dig at det blev forstået.",
+          s3:"Om du kan holde din position i tvivlen — eller om uroen får dig til at fylde tomrummet med flere ord."
+        },
+        p3:{
+          t:"Min mor siger noget, og jeg mærker mig selv blive lille.",
+          s1:"Til en middag kommenterer din mor en beslutning, du har taget. Tonen er let, men det rammer.",
+          s2:"Du mærker dig selv trække dig eller give efter, selvom du er uenig. Noget gammelt sætter ind.",
+          s3:"Om du kan blive ved med at være dig, mens presset fra en tæt relation trækker i en velkendt retning."
+        },
+        p4:{
+          t:"En samtale går skævt, og jeg prøver at rette den op.",
+          s1:"En ven virker kølig efter noget, du sagde. Du prøver at forklare, hvad du mente.",
+          s2:"Jo mere du forklarer, jo mere låst virker det. Du mærker trangen til at glatte ud, undskylde, få det godt igen.",
+          s3:"Om du kan holde til, at det ikke bliver løst med det samme — eller om du gør for meget for at genoprette ro."
+        }
+      }
+    },
+    en:{
+      title:"VALG — a training room for your relationships",
+      hero_h1:"When something keeps happening in your relationships",
+      hero_lead:"You try to explain. You try again. You give a little more.",
+      hero_turn:"But something in the situation doesn't change.",
+      recog_eyebrow:"Maybe you know this",
+      recog_li1:"A conversation that goes in circles",
+      recog_li2:"Something that stays with you afterwards",
+      recog_li3:"An irritation or unease that lingers",
+      recog_li4:"You try to reach them — but it doesn't work",
+      pivot:"It isn't the situations that are the problem. It's what happens inside them.",
+      what_eyebrow:"What is this?",
+      what_1:"VALG is a training room.",
+      what_2:"The situation doesn't get solved.",
+      what_3:"You see more clearly what you do.",
+      what_4:"You step into a concrete situation.",
+      what_5:"You respond with what you do.",
+      what_6:"And you see what it leads to.",
+      value_eyebrow:"What do you get out of it?",
+      value_stack:"<b>You get a clearer sense of —</b>",
+      gets_1:"what you do",
+      gets_2:"what it leads to",
+      gets_3:"what it costs",
+      seeing:"You notice what you do in the situation – <span class=\"mark\">while it's happening</span>. And when you see it as it happens, it weighs less afterwards.",
+      disarm:"No ready-made answers. No solution to follow. The situations don't disappear — but they don't have to hit you the same way. It can feel uncomfortable, or more direct than you expected. That's part of the training.",
+      ex_eyebrow:"Examples of situations",
+      card_tag1:"Partner", card_q1:"My partner pulls away, and I try to reach them.",
+      card_tag2:"Work", card_q2:"My manager doesn't reply, and I start explaining more.",
+      card_tag3:"Family", card_q3:"My mother says something, and I feel myself shrink.",
+      card_tag4:"Friend", card_q4:"A conversation goes wrong, and I try to fix it.",
+      own:"You can bring your own situation — or pick one.",
+      kicker:"So how do you train that?",
+      bridge_h2:"Think of it as fitness. Just for how you function in a situation where a conflict in a relationship won't give.",
+      bridge_sub:"Here the situation is the <b>barbell</b>. You don't solve it, and you don't beat it. You find out how much weight you can bear to lift.",
+      truths_label:"It works like lifting",
+      t1_h:"The barbell has to be heavy.",
+      t1_p:"If nothing pushes, you're not training anything. The resistance isn't a fault — it's the whole point.",
+      t2_h:"No one lifts it for you.",
+      t2_p:"No advice, no guidance, no right answer. You feel the load yourself.",
+      t3_h:"The barbell doesn't change. You do.",
+      t3_p:"The situation doesn't move on the outside. What moves is what you can handle.",
+      t4_h:"You don't beat a barbell.",
+      t4_p:"It isn't about being right or fixing it. It's about what you can handle when the pressure is on.",
+      areas_label:"The load hits four places",
+      a1_w:"Position", a1_p:"Whether you can keep being you while someone wants something else.",
+      a2_w:"Calm", a2_p:"Whether the unrest runs you, or you can function with it.",
+      a3_w:"Response", a3_p:"Whether you choose how you act, or it just happens on its own.",
+      a4_w:"Endurance", a4_p:"How long you hold before you pull back, push, or shut down.",
+      trust_summary:"What is it built on?",
+      trust_body:"VALG isn't just a chatbot making things up. The training builds on established psychological work about how we regulate ourselves in close relationships. The psychologist David Schnarch called it <em>differentiation</em>: staying yourself, even when a relationship pushes. You don't need to know the theory to use VALG — it sits underneath, not on top.",
+      foot_tag:"It promises you nothing. It gives you resistance.",
+      cta_label:"Start training",
+      report_link:"Report",
+      teams:"Opens in Microsoft Teams",
+      gdpr:"At the end you're asked for a short evaluation — and you choose whether your answers are saved.",
+      footer_micro:"VALG · a training room",
+      steps_label:"How it works",
+      step_1:"You briefly describe a situation where something in a relationship keeps getting to you.",
+      step_2:"VALG generates a few concrete scenarios — you pick the one closest to yours.",
+      step_3:"You step into the conversation and respond the way you actually would.",
+      step_4:"Afterwards you get feedback on the pattern that became visible under pressure.",
+      step_5:"Then you decide what happens next: run the scenario again, take one of the others, describe a new situation — or stop.",
+      loop:"The first time, you see the pattern. The next time, you train with it.",
+      card_hint:"See a typical run-through",
+      prev_l1:"A scenario VALG might create",
+      prev_l2:"What puts on the pressure",
+      prev_l3:"What the feedback might point to",
+      prev_frame:"An example of a typical run-through. You bring your own situation when you start.",
+      prev_close:"Close",
+      previews:{
+        p1:{
+          t:"My partner pulls away, and I try to reach them.",
+          s1:"You're sitting together after a bad evening. You ask what's wrong. Your partner answers briefly and looks away.",
+          s2:"The more you try to reach in, the more they close off. You feel the urge to explain, ask again, give a little more.",
+          s3:"Whether you can stay yourself when the contact doesn't come — or whether your response gets steered by the other's withdrawal."
+        },
+        p2:{
+          t:"My manager doesn't reply, and I start explaining more.",
+          s1:"You sent a proposal. Days pass. At the meeting your manager doesn't mention it at all.",
+          s2:"The silence grows. You feel the urge to elaborate, justify, make sure it was understood.",
+          s3:"Whether you can hold your position in the doubt — or whether the unrest makes you fill the void with more words."
+        },
+        p3:{
+          t:"My mother says something, and I feel myself shrink.",
+          s1:"At a dinner your mother comments on a decision you've made. The tone is light, but it lands.",
+          s2:"You feel yourself pull back or give in, even though you disagree. Something old sets in.",
+          s3:"Whether you can keep being you while pressure from a close relationship pulls in a familiar direction."
+        },
+        p4:{
+          t:"A conversation goes wrong, and I try to fix it.",
+          s1:"A friend seems cool after something you said. You try to explain what you meant.",
+          s2:"The more you explain, the more locked it feels. You feel the urge to smooth it over, apologize, make it good again.",
+          s3:"Whether you can bear that it isn't resolved right away — or whether you do too much to restore the calm."
+        }
+      }
+    },
+    no:{
+      title:"VALG — et treningsrom for relasjonene dine",
+      hero_h1:"Når noe fortsetter å skje i relasjonene dine",
+      hero_lead:"Du prøver å forklare. Du prøver igjen. Du gir litt mer.",
+      hero_turn:"Men noe i situasjonen endrer seg ikke.",
+      recog_eyebrow:"Kanskje kjenner du dette",
+      recog_li1:"En samtale som går i ring",
+      recog_li2:"Noe du går og tenker på etterpå",
+      recog_li3:"En irritasjon eller uro som blir hengende",
+      recog_li4:"At du prøver å få kontakt — men det virker ikke",
+      pivot:"Det er ikke situasjonene som er problemet. Det er hva som skjer i dem.",
+      what_eyebrow:"Hva er dette?",
+      what_1:"VALG er et treningsrom.",
+      what_2:"Situasjonen blir ikke løst.",
+      what_3:"Du ser tydeligere hva du selv gjør.",
+      what_4:"Du går inn i en konkret situasjon.",
+      what_5:"Du svarer på hva du gjør.",
+      what_6:"Og du ser hva det fører til.",
+      value_eyebrow:"Hva får du ut av det?",
+      value_stack:"<b>Du får en tydeligere opplevelse av —</b>",
+      gets_1:"hva du gjør",
+      gets_2:"hva det fører til",
+      gets_3:"hva det koster",
+      seeing:"Du oppdager hva du gjør i situasjonen – <span class=\"mark\">mens den pågår</span>. Og når du ser det, mens det skjer, fyller det mindre etterpå.",
+      disarm:"Ingen ferdige svar. Ingen løsning du skal følge. Situasjonene forsvinner ikke — men de trenger ikke ramme deg på samme måte. Det kan føles ubehagelig eller mer direkte enn du hadde ventet. Det er en del av treningen.",
+      ex_eyebrow:"Eksempler på situasjoner",
+      card_tag1:"Partner", card_q1:"Partneren min trekker seg, og jeg prøver å få kontakt.",
+      card_tag2:"Arbeid", card_q2:"Sjefen min svarer ikke, og jeg begynner å forklare mer.",
+      card_tag3:"Familie", card_q3:"Moren min sier noe, og jeg kjenner meg selv bli liten.",
+      card_tag4:"Venn", card_q4:"En samtale går skjevt, og jeg prøver å rette den opp.",
+      own:"Du kan ta med din egen situasjon — eller velge en.",
+      kicker:"Så hvordan trener man det?",
+      bridge_h2:"Tenk på det som trening. Bare for hvordan du fungerer i en situasjon der en konflikt i en relasjon ikke gir seg.",
+      bridge_sub:"Her er situasjonen <b>vektstangen</b>. Du løser den ikke, og du vinner ikke over den. Du finner ut hvor mye vekt du tåler å løfte.",
+      truths_label:"Det fungerer som styrketrening",
+      t1_h:"Vektstangen må være tung.",
+      t1_p:"Hvis ingenting presser, trener du ingenting. Motstanden er ikke en feil — den er hele poenget.",
+      t2_h:"Ingen løfter den for deg.",
+      t2_p:"Ingen råd, ingen veiledning, ingen fasit. Du kjenner belastningen selv.",
+      t3_h:"Vektstangen endrer seg ikke. Det gjør du.",
+      t3_p:"Situasjonen flytter seg ikke utad. Det som flytter seg, er hva du kan håndtere.",
+      t4_h:"Du vinner ikke over en vektstang.",
+      t4_p:"Det handler ikke om å få rett eller å løse det. Det handler om hva du kan håndtere når presset er på.",
+      areas_label:"Belastningen treffer fire steder",
+      a1_w:"Posisjon", a1_p:"Om du klarer å fortsette å være deg mens noen vil ha noe annet.",
+      a2_w:"Ro", a2_p:"Om uroen styrer deg, eller du kan fungere med den.",
+      a3_w:"Respons", a3_p:"Om du velger hvordan du handler, eller om det bare skjer av seg selv.",
+      a4_w:"Utholdenhet", a4_p:"Hvor lenge du holder før du trekker deg, presser eller lukker deg.",
+      trust_summary:"Hva bygger det på?",
+      trust_body:"VALG er ikke bare en chatbot som finner på. Treningen bygger på et anerkjent psykologisk arbeid om hvordan vi regulerer oss selv i nære relasjoner. Det kalte psykologen David Schnarch <em>differensiering</em>: å fortsette å være deg selv, også når en relasjon presser. Du trenger ikke kjenne teorien for å bruke VALG — den ligger under, ikke oppå.",
+      foot_tag:"Det lover deg ingenting. Det gir deg motstand.",
+      cta_label:"Start trening",
+      report_link:"Rapport",
+      teams:"Åpner i Microsoft Teams",
+      gdpr:"Til slutt blir du bedt om en kort evaluering — og du velger selv om svarene dine lagres.",
+      footer_micro:"VALG · et treningsrom",
+      steps_label:"Slik foregår det",
+      step_1:"Du beskriver kort en situasjon der noe i en relasjon fortsetter å ramme deg.",
+      step_2:"VALG lager flere konkrete scenarier — du velger det som ligger nærmest.",
+      step_3:"Du går inn i samtalen og svarer slik du faktisk ville svart.",
+      step_4:"Etterpå får du tilbakemelding på mønsteret som ble synlig da det presset.",
+      step_5:"Så velger du selv hva som skal skje: prøv scenariet igjen, ta et av de andre, beskriv en ny situasjon — eller stopp.",
+      loop:"Første gang ser du mønsteret. Neste gang trener du med det.",
+      card_hint:"Se et typisk forløp",
+      prev_l1:"Et scenario VALG kunne lage",
+      prev_l2:"Hva som presser",
+      prev_l3:"Hva tilbakemeldingen kunne peke på",
+      prev_frame:"Et eksempel på et typisk forløp. Din egen situasjon tar du med når du starter.",
+      prev_close:"Lukk",
+      previews:{
+        p1:{
+          t:"Partneren min trekker seg, og jeg prøver å få kontakt.",
+          s1:"Dere sitter etter en dårlig kveld. Du spør hva som er galt. Partneren din svarer kort og ser bort.",
+          s2:"Jo mer du prøver å nå inn, jo mer lukker den andre seg. Du kjenner trangen til å forklare, spørre igjen, gi litt mer.",
+          s3:"Om du klarer å bli stående i deg selv når kontakten ikke kommer — eller om svaret ditt blir styrt av den andres tilbaketrekning."
+        },
+        p2:{
+          t:"Sjefen min svarer ikke, og jeg begynner å forklare mer.",
+          s1:"Du har sendt et opplegg. Det går dager. På møtet nevner sjefen det ikke i det hele tatt.",
+          s2:"Stillheten fyller. Du kjenner trangen til å utdype, rettferdiggjøre, forsikre deg om at det ble forstått.",
+          s3:"Om du klarer å holde posisjonen din i tvilen — eller om uroen får deg til å fylle tomrommet med flere ord."
+        },
+        p3:{
+          t:"Moren min sier noe, og jeg kjenner meg selv bli liten.",
+          s1:"På en middag kommenterer moren din en beslutning du har tatt. Tonen er lett, men det treffer.",
+          s2:"Du kjenner deg selv trekke deg eller gi etter, selv om du er uenig. Noe gammelt setter inn.",
+          s3:"Om du klarer å fortsette å være deg mens presset fra en nær relasjon drar i en kjent retning."
+        },
+        p4:{
+          t:"En samtale går skjevt, og jeg prøver å rette den opp.",
+          s1:"En venn virker kjølig etter noe du sa. Du prøver å forklare hva du mente.",
+          s2:"Jo mer du forklarer, jo mer låst virker det. Du kjenner trangen til å glatte ut, be om unnskyldning, få det bra igjen.",
+          s3:"Om du klarer å tåle at det ikke blir løst med en gang — eller om du gjør for mye for å gjenopprette roen."
+        }
+      }
+    }
+  };
+
+  let currentLang = document.documentElement.lang || "da";
+
+  function setLang(lang){
+    const s = STR[lang];
+    if(!s) return;
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    if(s.title) document.title = s.title;
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const k = el.getAttribute("data-i18n");
+      if(s[k]!==undefined) el.textContent = s[k];
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach(el=>{
+      const k = el.getAttribute("data-i18n-html");
+      if(s[k]!==undefined) el.innerHTML = s[k];
+    });
+    document.querySelectorAll(".langbar button").forEach(b=>{
+      b.classList.toggle("active", b.dataset.lang===lang);
+    });
+    if(currentPreview) renderPreview();
+  }
+  document.querySelectorAll(".langbar button").forEach(b=>{
+    b.addEventListener("click", ()=>setLang(b.dataset.lang));
+  });
+
+  /* CTA er nu et almindeligt link (<a href> ovenfor), så ingen JS er nødvendig. */
+
+  /* ====== EKSEMPEL-PREVIEW (modal) ====== */
+  let currentPreview = null;
+  let lastFocused = null;
+  const overlayEl = document.getElementById('vpreview');
+  const closeEl   = document.getElementById('vpreview-close');
+
+  function renderPreview(){
+    if(!currentPreview) return;
+    const s = STR[currentLang] || STR.da;
+    const n = currentPreview.replace('p','');
+    const data = (s.previews && s.previews[currentPreview]) || {};
+    document.getElementById('vpreview-tag').textContent = s['card_tag'+n] || '';
+    document.getElementById('vpreview-title').textContent = data.t || '';
+    const body = document.getElementById('vpreview-body');
+    body.innerHTML = '';
+    [[s.prev_l1,data.s1],[s.prev_l2,data.s2],[s.prev_l3,data.s3]].forEach(([lbl,txt])=>{
+      const row = document.createElement('div'); row.className = 'row';
+      const l = document.createElement('span'); l.className = 'lbl'; l.textContent = lbl || '';
+      const p = document.createElement('p'); p.textContent = txt || '';
+      row.appendChild(l); row.appendChild(p); body.appendChild(row);
+    });
+    document.getElementById('vpreview-frame').textContent = s.prev_frame || '';
+    closeEl.setAttribute('aria-label', s.prev_close || 'Luk');
+  }
+
+  function onKeydown(e){
+    if(e.key === 'Escape'){ closePreview(); return; }
+    if(e.key === 'Tab'){
+      const f = overlayEl.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+      if(!f.length) return;
+      const first = f[0], last = f[f.length-1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+
+  function openPreview(key){
+    currentPreview = key;
+    renderPreview();
+    lastFocused = document.activeElement;
+    overlayEl.hidden = false;
+    requestAnimationFrame(()=> overlayEl.classList.add('open'));
+    closeEl.focus();
+    document.addEventListener('keydown', onKeydown);
+  }
+
+  function closePreview(){
+    overlayEl.classList.remove('open');
+    document.removeEventListener('keydown', onKeydown);
+    const restore = lastFocused;
+    currentPreview = null;
+    setTimeout(()=>{ overlayEl.hidden = true; if(restore) restore.focus(); }, 200);
+  }
+
+  overlayEl.addEventListener('mousedown', e => { if(e.target === overlayEl) closePreview(); });
+  closeEl.addEventListener('click', closePreview);
+  document.querySelectorAll('.card[data-preview]').forEach(card => {
+    const open = () => openPreview(card.getAttribute('data-preview'));
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(); }
+    });
+  });
+
+  /* scroll-reveal */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold:0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

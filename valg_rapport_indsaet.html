@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VALG — Lav din session-rapport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ffffff;--screen:#e9ebe6;--ink:#1b1f1d;--ink-soft:#474d48;--muted:#83887f;
+    --accent:#2c5b54;--accent-tint:#eef3f1;--line:#e3e5e0;--user:#2c5b54;--counterpart:#8a5a3c;
+    --serif:"Newsreader",Georgia,"Times New Roman",serif;
+    --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--screen);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .hidden{display:none !important}
+
+  /* ---------- Buttons ---------- */
+  .btn{font-family:var(--sans);font-size:13.5px;font-weight:500;border:1px solid transparent;border-radius:7px;padding:10px 18px;cursor:pointer;line-height:1}
+  .btn-solid{background:var(--accent);color:#fff}
+  .btn-solid:hover{background:#24544d}
+  .btn-outline{background:transparent;color:var(--ink-soft);border-color:var(--line)}
+  .btn-outline:hover{border-color:var(--muted)}
+  .btn-primary{background:#5ab6a6;color:#0f2320}
+  .btn-primary:hover{background:#6cc4b5}
+  .btn-ghost{background:transparent;color:#d7dad4;border-color:#3a403c}
+  .btn-ghost:hover{border-color:#5a615c}
+
+  /* ---------- Intake (screen only) ---------- */
+  .intake{max-width:720px;margin:0 auto;padding:52px 24px 90px}
+  .intake .brand{font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:.02em;line-height:1}
+  .intake .brand .dot{color:var(--accent)}
+  .intake .kicker{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+  .intake h1{font-family:var(--serif);font-size:27px;font-weight:600;margin:30px 0 8px;line-height:1.15}
+  .intake .lead{font-size:15px;color:var(--ink-soft);max-width:60ch;margin:0 0 22px}
+  .intake .lead b{color:var(--ink);font-weight:600}
+  textarea.paste{
+    width:100%;min-height:270px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.5;color:var(--ink);background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;padding:16px;resize:vertical;
+  }
+  textarea.paste:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+  .intake-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .intake-actions .spacer{flex:1}
+  .notice{margin-top:16px;padding:12px 16px;border-radius:8px;font-size:13.5px;line-height:1.5}
+  .notice.err{background:#fbecec;color:#7a2b2b;border:1px solid #eccccc}
+  .notice.info{background:var(--accent-tint);color:#245049;border:1px solid #cfe0db}
+  .notice code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:rgba(0,0,0,.05);padding:1px 5px;border-radius:4px}
+  details.schema{margin-top:26px;border-top:1px solid var(--line);padding-top:16px}
+  details.schema summary{cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);list-style:none}
+  details.schema summary::-webkit-details-marker{display:none}
+  details.schema summary::before{content:"▸ ";color:var(--accent)}
+  details.schema[open] summary::before{content:"▾ "}
+  details.schema pre{
+    margin:14px 0 0;background:#1b1f1d;color:#d7ddd6;border-radius:10px;padding:18px 20px;overflow:auto;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.55;
+  }
+  details.schema .k{color:#8fd0c2}
+  details.schema .note{font-size:12.5px;color:var(--muted);margin:12px 0 0;line-height:1.5}
+
+  /* ---------- App toolbar (after render, screen only) ---------- */
+  .toolbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;background:rgba(27,31,29,.96);color:#f3f4f1;backdrop-filter:blur(6px)}
+  .toolbar .brand{font-family:var(--serif);font-size:17px}
+  .toolbar .brand b{font-weight:600}
+  .toolbar .hint{color:#aeb3ab;font-size:12.5px}
+  .toolbar-actions{display:flex;gap:10px;align-items:center}
+
+  /* ---------- Document sheet ---------- */
+  .sheet{background:var(--paper);max-width:820px;margin:26px auto 60px;padding:56px 60px 64px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 18px 40px rgba(0,0,0,.10)}
+
+  .masthead{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:18px;border-bottom:2px solid var(--ink)}
+  .wordmark{font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:.02em;line-height:1}
+  .wordmark .dot{color:var(--accent)}
+  .mast-kicker{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+  .masthead .doctype{text-align:right;font-size:12px;color:var(--muted);line-height:1.5}
+  .masthead .doctype strong{display:block;color:var(--ink-soft);font-weight:600;font-size:13px}
+
+  .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:2px 26px;margin:22px 0 6px}
+  .meta .cell{padding:6px 0}
+  .meta .m-lbl{font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+  .meta .m-val{font-size:14px;color:var(--ink);margin-top:2px}
+  .provenance{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 18px}
+  .provenance span b{color:var(--ink-soft);font-weight:600}
+
+  section{margin-top:38px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+  .sec-no{font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.06em;padding-top:3px}
+  .sec-title{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.1;margin:0}
+  .sec-sub{font-size:12.5px;color:var(--muted);margin-left:auto;text-align:right;max-width:48%;padding-top:5px}
+  .lbl{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+
+  .transcript{border-left:2px solid var(--line)}
+  .turn{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:11px 0 11px 18px;margin-left:-2px;border-left:2px solid transparent}
+  .turn.user{border-left-color:var(--user)}
+  .turn.counterpart{border-left-color:var(--counterpart)}
+  .turn .who{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding-top:3px}
+  .turn.user .who{color:var(--user)}
+  .turn.counterpart .who{color:var(--counterpart)}
+  .turn .said{font-size:14.5px;color:var(--ink);line-height:1.5;white-space:pre-line}
+  .turn.counterpart .said{color:var(--ink-soft)}
+
+  .fb-subhead{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:26px 0 12px}
+  .fb-summary{background:var(--accent-tint);border-radius:10px;padding:20px 24px}
+  .fb-headline{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .fb-headline .lbl{color:var(--accent)}
+  .fb-headline-val{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--ink)}
+  .fb-headline-note{font-size:14px;color:var(--ink-soft);margin:8px 0 0;line-height:1.5}
+  .fb-summary-row{display:grid;grid-template-columns:190px 1fr;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(44,91,84,.16);font-size:13.5px;color:var(--ink-soft)}
+  .fb-summary-row .lbl{padding-top:2px}
+  .fb-summary-row b{color:var(--ink)}
+  .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .metric{background:var(--paper);padding:13px 16px}
+  .metric .m-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .metric .m-name{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink)}
+  .metric .m-axis{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .metric .m-value{font-size:14px;color:var(--accent);font-weight:500;margin-top:3px}
+  .fb-direction{margin-top:22px;border-left:3px solid var(--accent);padding:2px 0 2px 16px}
+  .fb-direction p{margin:4px 0 0;font-size:15px;color:var(--ink)}
+  .contrast{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .contrast > div{border-top:1px solid var(--line);padding-top:10px}
+  .contrast p{margin:5px 0 0;font-size:14px;color:var(--ink-soft);line-height:1.45}
+  .fb-meta{margin-top:22px;display:grid;gap:9px}
+  .fb-meta > div{display:grid;grid-template-columns:120px 1fr;gap:16px;font-size:13px;color:var(--ink-soft)}
+  .forankring{margin-top:30px;border-top:2px solid var(--accent);padding-top:16px}
+  .forankring-head{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink)}
+  .forankring-sub{font-size:12px;color:var(--muted);margin:2px 0 14px}
+  .forankring-item{display:grid;grid-template-columns:170px 1fr;gap:18px;padding:12px 0;border-top:1px solid var(--line)}
+  .fi-label{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--accent)}
+  .fi-value{font-size:12.5px;color:var(--ink-soft);display:block;margin-top:2px}
+  .fi-why{font-size:14px;color:var(--ink-soft);margin:0;line-height:1.5}
+  .scenario{margin-top:30px;background:var(--accent-tint);border-radius:10px;padding:18px 22px}
+  .scenario .lbl{color:var(--accent)}
+  .scenario p{margin:6px 0 0;font-size:14.5px;color:var(--ink);line-height:1.55;white-space:pre-line}
+  .fb-line{display:grid;grid-template-columns:210px 1fr;gap:16px;padding:8px 0;border-top:1px solid var(--line)}
+  .fb-line:first-child{border-top:none}
+  .fb-k{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--accent);line-height:1.3}
+  .fb-v{font-size:14.5px;color:var(--ink);line-height:1.5}
+  .fb-note-line{margin:2px 0 8px;font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+  .fb-textblock + .fb-textblock{margin-top:26px;border-top:2px solid var(--accent);padding-top:16px}
+  .fb-vismere-title{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink);margin-bottom:10px}
+  .fb-pressure{display:flex;align-items:baseline;gap:14px;margin:6px 0 14px;flex-wrap:wrap}
+  .fb-pres-dims{display:flex;gap:0;flex-wrap:wrap;font-size:14px;color:var(--ink)}
+  .fb-pres-dims span:not(:last-child)::after{content:"·";margin:0 10px;color:var(--muted)}
+  .fb-bullet{position:relative;padding:5px 0 5px 18px;font-size:14.5px;color:var(--ink-soft);line-height:1.5}
+  .fb-bullet::before{content:"–";position:absolute;left:0;color:var(--accent);font-weight:600}
+  .fb-bullet b{color:var(--ink);font-weight:600}
+  .eval-item{padding:12px 0;border-top:1px solid var(--line)}
+  .eval-item:first-child{border-top:none}
+  .eval-q{font-size:13px;color:var(--muted);font-weight:500}
+  .eval-a{font-size:15px;color:var(--ink);margin-top:3px}
+  .closing{margin-top:40px;padding-top:18px;border-top:2px solid var(--ink);font-size:12px;color:var(--muted);line-height:1.6}
+  .closing b{color:var(--ink-soft);font-weight:600}
+
+  .print-footer{display:none}
+
+  @media (max-width:560px){
+    .sheet{padding:32px 22px 40px}
+    .meta{grid-template-columns:1fr 1fr}
+    .metric-grid,.contrast,.fb-summary-row,.fb-meta > div,.forankring-item{grid-template-columns:1fr;gap:6px}
+    .sec-sub{display:none}
+  }
+
+  @page{ size:A4; margin:18mm 16mm 24mm; }
+  @media print{
+    body{background:#fff;font-size:10.6pt}
+    .intake,.toolbar{display:none !important}
+    .sheet{max-width:none;margin:0;padding:0;box-shadow:none}
+    section{margin-top:22pt}
+    .sec-head{margin-bottom:11pt;break-after:avoid}
+    .sec-title{font-size:16pt}.wordmark{font-size:22pt}.fb-subhead{break-after:avoid}
+    .turn,.fb-summary,.fb-headline,.metric,.contrast,.fb-direction,.forankring-item,.eval-item,.scenario,.fb-line{break-inside:avoid}
+    .fb-summary,.forankring-head,.forankring,.fi-label,.m-value,.fb-direction,.fb-headline-val,
+    .metric-grid,.metric,.lbl,.turn.user,.turn.counterpart,.wordmark .dot,.sec-no{
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .print-footer{display:flex;justify-content:space-between;position:fixed;bottom:6mm;left:16mm;right:16mm;font-size:8pt;color:#9aa097}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ INTAKE ============ -->
+  <div class="intake" id="intake">
+    <div class="brand">VALG<span class="dot">.</span></div>
+    <div class="kicker">Relationel træningssession</div>
+    <h1>Lav din session-rapport</h1>
+    <p class="lead">Indsæt den session-blok du fik i VALG, og tryk <b>Lav rapport</b>. Rapporten dannes her i din browser — du gemmer den selv som PDF, og <b>intet sendes nogen steder</b>.</p>
+
+    <textarea class="paste" id="paste" spellcheck="false" placeholder="Indsæt session-data her (JSON)…"></textarea>
+
+    <div class="intake-actions">
+      <button class="btn btn-solid" id="make">Lav rapport</button>
+      <button class="btn btn-outline" id="example">Indsæt eksempel</button>
+      <div class="spacer"></div>
+      <button class="btn btn-outline" id="clear">Ryd</button>
+    </div>
+
+    <div class="notice err hidden" id="err"></div>
+    <div class="notice info hidden" id="info"></div>
+
+    <details class="schema">
+      <summary>Sådan skal dataen se ud</summary>
+      <pre id="schemaBox"></pre>
+      <p class="note">Byg denne JSON i Copilot Studio / Power Automate ud fra dine egne variabler (transcript, feedback-felterne, evaluering). Alle sektioner er valgfrie — det der er med, bliver vist. Har du kun transcriptet som én tekst, kan du bruge <code>transcriptText</code> i stedet for <code>transcript</code>. Indsætter du rå chat-tekst i stedet for JSON, viser siden i det mindste samtalen.</p>
+    </details>
+  </div>
+
+  <!-- ============ APP (rendered report) ============ -->
+  <div class="app hidden" id="app">
+    <div class="toolbar">
+      <div class="brand"><b>VALG</b> · Session-rapport</div>
+      <div class="toolbar-actions">
+        <span class="hint">Vælg “Gem som PDF” i printdialogen</span>
+        <button class="btn btn-ghost" id="back">Indsæt ny</button>
+        <button class="btn btn-primary" id="save">Gem som PDF</button>
+      </div>
+    </div>
+    <div class="sheet" id="sheet"></div>
+    <div class="print-footer"><span>VALG · relationel træningssession</span><span id="pf-date"></span></div>
+  </div>
+
+<script>
+/* =====================================================================
+   VALG — paste-flow. Samme render-motor som session-rapporten.
+   Bruger indsætter JSON (eller rå tekst) -> render -> "Gem som PDF".
+   Alt sker client-side. Ingen data forlader enheden.
+   ===================================================================== */
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const whoLabel = w => w === "user" ? "Dig" : "Modpart";
+
+/* Best-effort split af rå transcript-tekst: "Bruger:" markerer brugerens tur,
+   alt derimellem er modpartens svar. Fallback når du ikke har struktureret data. */
+function parseTranscriptText(txt){
+  const lines = String(txt).replace(/\r/g,'').split('\n');
+  const noise = /^(hvad (gør|gjorde) du.*|dine handlinger.*|forløb\s*:.*|scenarie\s*:.*|tryk afsend.*|feedback\s*:.*)$/i;
+  const turns = []; let cur = null;
+  for(const raw of lines){
+    const line = raw.trim();
+    const um = line.match(/^bruger\s*:\s*(.*)$/i);
+    if(um){
+      if(cur && cur.text.trim()) turns.push(cur);
+      turns.push({who:'user', text: um[1].trim()});
+      cur = {who:'counterpart', text:''};
+      continue;
+    }
+    if(cur){
+      if(!line || noise.test(line)) continue;
+      cur.text += (cur.text ? '\n' : '') + line;
+    }
+  }
+  if(cur && cur.text.trim()) turns.push(cur);
+  return turns.filter(t => t.text.trim().length);
+}
+
+/* Reparér JSON hvor markdown-rendering har fjernet backslash foran citationstegn.
+   Går tegn for tegn; et " inde i en streng, som ikke efterfølges af : , } eller ],
+   er et litteralt citationstegn og escapes. Rører ikke gyldig JSON. */
+function repairJson(raw){
+  let out='', inStr=false, esc=false, fixes=0;
+  for(let i=0;i<raw.length;i++){
+    const c=raw[i];
+    if(esc){ out+=c; esc=false; continue; }
+    if(c==='\\'){ out+=c; esc=true; continue; }
+    if(c==='"'){
+      if(!inStr){ inStr=true; out+=c; continue; }
+      let j=i+1; while(j<raw.length && /\s/.test(raw[j])) j++;
+      const n=raw[j];
+      if(n===':'||n===','||n==='}'||n===']'||n===undefined){ inStr=false; out+=c; }
+      else { out+='\\"'; fixes++; }
+      continue;
+    }
+    out+=c;
+  }
+  return {text:out, fixes};
+}
+
+/* Normalisér indkommende session til det render forventer. */
+function normalize(session){
+  const s = Object.assign({}, session);
+  if((!s.transcript || !s.transcript.length) && s.transcriptText){
+    s.transcript = parseTranscriptText(s.transcriptText);
+  }
+  return s;
+}
+
+function metricCard(item){
+  return `<div class="metric">
+    <div class="m-top"><span class="m-name">${esc(item.label)}</span>${item.axis?`<span class="m-axis">${esc(item.axis)}</span>`:""}</div>
+    <div class="m-value">${esc(item.value)}</div>
+  </div>`;
+}
+function makeSection(no,title,sub,inner){
+  return `<section>
+    <div class="sec-head">
+      <span class="sec-no">${String(no).padStart(2,'0')}</span>
+      <h2 class="sec-title">${esc(title)}</h2>
+      ${sub?`<span class="sec-sub">${esc(sub)}</span>`:""}
+    </div>${inner}</section>`;
+}
+
+function renderFeedback(f, forankring){
+  let html = "";
+  if(f.funktionsniveau || f.moenster || f.bundethed){
+    html += `<div class="fb-summary">`;
+    if(f.funktionsniveau){
+      html += `<div class="fb-headline"><span class="lbl">Funktionsniveau under pres</span><span class="fb-headline-val">${esc(f.funktionsniveau.value||"")}</span></div>`;
+      if(f.funktionsniveau.note) html += `<p class="fb-headline-note">${esc(f.funktionsniveau.note)}</p>`;
+    }
+    if(f.moenster) html += `<div class="fb-summary-row"><span class="lbl">Mønster</span><span>${esc(f.moenster)}</span></div>`;
+    if(f.bundethed) html += `<div class="fb-summary-row"><span class="lbl">${esc(f.bundethed.label||"Bundet til den andens respons")}</span><span><b>${esc(f.bundethed.value||"")}</b>${f.bundethed.note?" — "+esc(f.bundethed.note):""}</span></div>`;
+    html += `</div>`;
+  }
+  if(f.akser && f.akser.length) html += `<h3 class="fb-subhead">Akser</h3><div class="metric-grid">${f.akser.map(metricCard).join("")}</div>`;
+  if(f.traeningsomraader && f.traeningsomraader.length) html += `<h3 class="fb-subhead">Fire træningsområder</h3><div class="metric-grid">${f.traeningsomraader.map(metricCard).join("")}</div>`;
+  if(f.traeningsretning) html += `<div class="fb-direction"><span class="lbl">Træningsretning</span><p>${esc(f.traeningsretning)}</p></div>`;
+  if(f.kontrast) html += `<h3 class="fb-subhead">Kontrast</h3><div class="contrast">
+      <div><span class="lbl">Observeret</span><p>${esc(f.kontrast.observeret||"")}</p></div>
+      <div><span class="lbl">Alternativt mønster</span><p>${esc(f.kontrast.alternativ||"")}</p></div></div>`;
+  const meta = [["Udfoldning",f.udfoldning],["Pres",f.pres],["Markør",f.markoer]].filter(x=>x[1]);
+  if(meta.length) html += `<div class="fb-meta">${meta.map(x=>`<div><span class="lbl">${esc(x[0])}</span><span>${esc(x[1])}</span></div>`).join("")}</div>`;
+  if(forankring && forankring.length){
+    html += `<div class="forankring"><div class="forankring-head">Sådan kan feedbacken forstås</div>
+      <p class="forankring-sub">Hvert felt forankret i det, der faktisk skete i sessionen.</p>
+      ${forankring.map(x=>`<div class="forankring-item">
+        <div><span class="fi-label">${esc(x.label)}</span><span class="fi-value">${esc(x.value||"")}</span></div>
+        <p class="fi-why">${esc(x.begrundelse||"")}</p></div>`).join("")}</div>`;
+  }
+  return html;
+}
+
+/* Kendte V5.2-labels (DA/NO/EN) — bruges KUN til at style linjer, ikke til semantisk mapping.
+   Rammer en linje ikke en label, falder den pænt tilbage til en note-linje. */
+const FB_LABELS = ["funktionsniveau under pres","funksjonsnivå under press","functional level under pressure",
+  "mønster","pattern","bundet til den andens respons","bundet til den andres respons","dependence on the other's response",
+  "signal","afvigelse","avvik","deviation","position","posisjon","ro","composure","respons","response",
+  "udholdenhed","utholdenhet","endurance","træningsretning","treningsretning","training direction",
+  "observeret","observert","observed","alternativt mønster","alternative pattern",
+  "udfoldning","utfoldelse","unfolding","pres","press","pressure","markør","marker"];
+const HEADER_LABELS = ["fire træningsområder","fire treningsområder","four training areas","kontrast","contrast"];
+const VISMERE_TITLES = ["sådan kan feedbacken forstås","slik kan tilbakemeldingen forstås","how to read this feedback"];
+const eqi = (a,b) => a.toLowerCase().replace(/[:\s]+$/,"") === b.toLowerCase().replace(/[:\s]+$/,"");
+
+const DIR_LABELS = ["træningsretning","treningsretning","training direction"];
+const CONSTRUCTS = ["position","posisjon","ro","composure","respons","response","udholdenhed","utholdenhet","endurance"];
+
+/* Styler for BEGGE feedback-formater: V5.2 (felt-labels) og V60 U (Det holdt: / punktlister /
+   Pres: a · b · c / Træningsretning). Ukendte linjer falder blødt tilbage til note-linjer. */
+function styleFeedbackLines(text){
+  const out = [];
+  String(text||"").replace(/\*\*/g,"").split("\n").forEach(raw=>{
+    const l = raw.replace(/\s+$/,"").trim();
+    if(!l) return;
+
+    // VISMERE-titel (V5.2 udvidet læsning)
+    if(VISMERE_TITLES.some(t=>eqi(t,l))){ out.push(`<div class="fb-vismere-title">${esc(l.replace(/:\s*$/,""))}</div>`); return; }
+
+    // Pres-linje: "Pres: a · b · c" (U) eller "Pres: a, b, c" (V5.2)
+    const pm = l.match(/^(pres|press|pressure)\s*[:：]\s*(.+)$/i);
+    if(pm && (pm[2].includes("·") || pm[2].split(",").length >= 2)){
+      const parts = pm[2].split(/·|,/).map(s=>s.trim()).filter(Boolean);
+      out.push(`<div class="fb-pressure"><span class="lbl">${esc(pm[1])}</span><div class="fb-pres-dims">${parts.map(p=>`<span>${esc(p)}</span>`).join("")}</div></div>`);
+      return;
+    }
+
+    const idx = l.indexOf(": ");
+
+    // Træningsretning → accent-blok
+    if(idx > 0 && DIR_LABELS.some(k=>eqi(k, l.slice(0,idx).trim()))){
+      out.push(`<div class="fb-direction"><span class="lbl">${esc(l.slice(0,idx).trim())}</span><p>${esc(l.slice(idx+2).trim())}</p></div>`);
+      return;
+    }
+
+    // Punktlinje (U-format): "- Position holdt imod …"
+    if(/^[-–•]\s+/.test(l)){
+      const t = l.replace(/^[-–•]\s+/,"");
+      const w = (t.match(/^(\S+)/)||[])[1] || "";
+      const wClean = w.replace(/[:,].*$/,"");
+      const inner = (w && CONSTRUCTS.some(c=>eqi(c,wClean)))
+        ? `<b>${esc(w)}</b>${esc(t.slice(w.length))}`
+        : esc(t);
+      out.push(`<div class="fb-bullet">${inner}</div>`);
+      return;
+    }
+
+    // V5.2 felt: "Label: value"
+    if(idx > 0){
+      const label = l.slice(0,idx).trim(), rest = l.slice(idx+2).trim();
+      if(FB_LABELS.some(k=>eqi(k,label)) || HEADER_LABELS.some(k=>eqi(k,label)))
+        return out.push(`<div class="fb-line"><span class="fb-k">${esc(label)}</span><span class="fb-v">${esc(rest)}</span></div>`);
+    }
+
+    // Overskrift der ender på ":" (Det holdt: / Det gav efter først: / Kontrast: / Fire træningsområder:)
+    if(/[:：]$/.test(l) && l.length <= 48){
+      out.push(`<h3 class="fb-subhead">${esc(l.replace(/[:：]\s*$/,""))}</h3>`);
+      return;
+    }
+
+    // fallback: note-linje
+    out.push(`<p class="fb-note-line">${esc(l)}</p>`);
+  });
+  return out.join("");
+}
+
+/* Tekst-tilstand: renderer FeedbackMain + FeedbackExtended (allerede splittet på [[VISMERE]] i orchestratoren) */
+function renderFeedbackText(main, extended){
+  let html = "";
+  if(main && main.trim()) html += `<div class="fb-textblock">${styleFeedbackLines(main)}</div>`;
+  if(extended && extended.trim()) html += `<div class="fb-textblock">${styleFeedbackLines(extended)}</div>`;
+  return html;
+}
+
+function render(session){
+  const s = normalize(session);
+  const m = s.meta||{}, p = s.provenance, f = s.feedback;
+  document.getElementById('pf-date').textContent = m.dato || "";
+
+  const metaCells = [["Scenarie",m.scenarie],["Modpart",m.modpart],["Dato",m.dato],["Sprog",m.sprog],["Omfang",m.omfang]]
+    .filter(c=>c[1]).map(([l,v])=>`<div class="cell"><div class="m-lbl">${esc(l)}</div><div class="m-val">${esc(v)}</div></div>`).join("");
+  const prov = p ? Object.entries(p).map(([k,v])=>`<span><b>${esc(k)}</b> ${esc(v)}</span>`).join("") : "";
+
+  let n = 0; const secs = [];
+  if(s.transcript && s.transcript.length){
+    const turns = s.transcript.map(t=>`<div class="turn ${t.who==='user'?'user':'counterpart'}">
+      <div class="who">${esc(whoLabel(t.who))}</div><div class="said">${esc(t.text)}</div></div>`).join("");
+    secs.push(makeSection(++n,"Samtalen","Hele forløbet, ord for ord.",`<div class="transcript">${turns}</div>`));
+  }
+  if(f && Object.keys(f).length){
+    secs.push(makeSection(++n,"Feedback","Observation af adfærd under pres — med kontrast og træningsretning.",renderFeedback(f, s.forankring)));
+  } else if(s.feedbackMain || s.feedbackExtended){
+    secs.push(makeSection(++n,"Feedback","Observation af adfærd under pres.",renderFeedbackText(s.feedbackMain, s.feedbackExtended)));
+  } else if(s.forankring && s.forankring.length){
+    secs.push(makeSection(++n,"Feedback","",renderFeedback({}, s.forankring)));
+  }
+  if(s.evaluering && s.evaluering.length){
+    const ev = s.evaluering.map(e=>`<div class="eval-item"><div class="eval-q">${esc(e.q)}</div><div class="eval-a">${esc(e.a)}</div></div>`).join("");
+    secs.push(makeSection(++n,"Evaluering","Dine egne svar fra sessionen.",ev));
+  }
+
+  document.getElementById('sheet').innerHTML = `
+    <header class="masthead">
+      <div><div class="wordmark">VALG<span class="dot">.</span></div><div class="mast-kicker">Relationel træningssession</div></div>
+      <div class="doctype"><strong>Session-rapport</strong>Til eget brug eller til din behandler</div>
+    </header>
+    ${metaCells?`<div class="meta">${metaCells}</div>`:""}
+    ${prov?`<div class="provenance">${prov}</div>`:""}
+    ${s.scenarie?`<div class="scenario"><span class="lbl">Scenarie</span><p>${esc(s.scenarie)}</p></div>`:""}
+    ${secs.join("")}
+    <div class="closing"><b>Om rapporten.</b> VALG er et træningsværktøj bygget på Schnarchs differentierings­tilgang og er ikke terapi eller behandling. Rapporten er lavet lokalt i din browser og gemmes kun, hvis du selv vælger “Gem som PDF”. Den sendes ikke nogen steder.</div>`;
+  document.title = reportFilename();
+  return secs.length;
+}
+
+/* Filnavn til "Gem som PDF": browseren bruger document.title */
+function reportFilename(){
+  const d = new Date(), p = n => String(n).padStart(2,'0');
+  return `VALG Session report ${p(d.getDate())}.${p(d.getMonth()+1)}.${d.getFullYear()} ${p(d.getHours())}.${p(d.getMinutes())}`;
+}
+
+/* --------------------------- intake wiring --------------------------- */
+const $ = id => document.getElementById(id);
+function showErr(msg){ const e=$('err'); e.innerHTML=msg; e.classList.remove('hidden'); $('info').classList.add('hidden'); }
+function showInfo(msg){ const e=$('info'); e.innerHTML=msg; e.classList.remove('hidden'); }
+function clearNotices(){ $('err').classList.add('hidden'); $('info').classList.add('hidden'); }
+
+function loadFromText(text){
+  clearNotices();
+  const raw = String(text||"").trim();
+  if(!raw){ showErr("Feltet er tomt. Indsæt din session-data først."); return; }
+
+  let session = null, infoMsg = "";
+
+  // Try JSON first (tolerate a ```json fence)
+  const unfenced = raw.replace(/^```(?:json)?\s*/i,"").replace(/```$/,"").trim();
+  try{
+    session = JSON.parse(unfenced);
+  }catch(e0){
+    /* Teams' markdown-rendering spiser backslash foran " (\" bliver til "), så JSON'en
+       ankommer ødelagt. Reparér: escape citationstegn der står inde i en streng. */
+    try{
+      const rep = repairJson(unfenced);
+      if(rep.fixes > 0){ session = JSON.parse(rep.text); }
+      else throw e0;
+    }catch(e){
+    // Not JSON — if it looks like raw chat, salvage the transcript
+    if(/(^|\n)\s*bruger\s*:/i.test(raw)){
+      session = { transcriptText: raw };
+      infoMsg = "Det her ligner rå chat-tekst, ikke JSON — så jeg viser kun <b>samtalen</b>. Indsæt JSON for at få feedback og evaluering med.";
+    }else{
+      showErr("Kunne ikke læse teksten som JSON. Tjek at du har kopieret hele blokken. <br><code>"+esc(e.message)+"</code>");
+      return;
+    }
+    }
+  }
+
+  const count = render(session);
+  if(!count){ showErr("Ingen sessionsdata fundet i det indsatte — hverken samtale, feedback eller evaluering."); return; }
+
+  $('intake').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  if(infoMsg){ /* info shown next time intake opens is irrelevant; skip */ }
+  window.scrollTo(0,0);
+}
+
+$('make').addEventListener('click', ()=>loadFromText($('paste').value));
+$('clear').addEventListener('click', ()=>{ $('paste').value=""; clearNotices(); $('paste').focus(); });
+$('back').addEventListener('click', ()=>{ $('app').classList.add('hidden'); $('intake').classList.remove('hidden'); document.title="VALG — Lav din session-rapport"; window.scrollTo(0,0); });
+$('save').addEventListener('click', ()=>{ document.title = reportFilename(); window.print(); });
+
+/* Ctrl/Cmd+Enter = Lav rapport */
+$('paste').addEventListener('keydown', e=>{ if((e.metaKey||e.ctrlKey)&&e.key==='Enter') loadFromText($('paste').value); });
+
+/* ---------- Eksempel-data (din faktiske session) + skema ---------- */
+const EXAMPLE = {
+  meta:{ modpart:"Modvillig modpart", dato:"21. juli 2026", sprog:"Dansk", omfang:"16 replikker" },
+  scenarie:"I sidder og spiser sammen, og du prøver at dele en oplevelse fra dagen. Hun afbryder dig midt i sætningen og begynder at tale om noget helt andet.",
+  provenance:{ ScenarioID:"SC-021", ScenarioVersion:"v1", GeneratorVersion:"V42c1", TrainerVersion:"V42c1", FeedbackVersion:"V5.2" },
+  transcriptText:
+    "Bruger: Hov hvad skete der lige der, jeg var lige ved at sige noget\n"+
+    "Hun holder blikket i tallerkenen, tygger langsomt. En kort skuldretrækning.\n“Du kan jo bare sige det alligevel, hvis det er så vigtigt.”\n"+
+    "Bruger: Prøv at høre skat, jeg ved godt at jeg har holdt dig på afstand i 20 år. Jeg gør noget andet nu og det ved du godt.\n"+
+    "Hun ser hurtigt op, men kun et øjeblik.\n“Det… ændrer ikke ret meget lige nu.”\nHun begynder at spise videre uden at kigge igen.\n"+
+    "Bruger: Jo det ændrer noget og spørgsmålet er om du vil være med til at ændre måden vi er sammen på for jeg vil gerne.\n"+
+    "“Det lyder som om du vil have et ja nu.” Hun skubber tallerkenen to centimeter væk. “Jeg er ikke der.”",
+  // Tekst-tilstand: præcis som Global.FeedbackMain / Global.FeedbackExtended fra orchestratoren
+  feedbackMain:
+    "Pres: relationelt medium · ubehag medium · tid medium\n"+
+    "\n"+
+    "Det holdt:\n"+
+    "- Position holdt imod “du undgår altid dybe emner”, som kostede at stå ved eget grundlag og samtidig lytte uden at gå i forsvar.\n"+
+    "- Ro holdt imod “hun virker ikke overbevist og skifter emne”, som kostede at blive i interaktionen uden krav om løsning.\n"+
+    "\n"+
+    "Intet gav efter under det pres, der var til stede.\n"+
+    "\n"+
+    "Træningsretning: kapacitet til at forblive ro under pres",
+  feedbackExtended: "",
+  evaluering:[
+    {q:"Hvad gjorde du, da det begyndte at koste?",a:"Fastholdt mit tema"},
+    {q:"Hvor længe blev du i presset?",a:"Passende"},
+    {q:"Hvor tydeligt var presset? (1–5)",a:"2"},
+    {q:"Er der noget fra det her, du genkender fra din virkelighed?",a:"Ja at det kan være svært at komme ind til hende."}
+  ]
+};
+$('example').addEventListener('click', ()=>{ $('paste').value = JSON.stringify(EXAMPLE,null,2); clearNotices(); });
+
+/* Skema-visning */
+$('schemaBox').textContent =
+`{
+  "meta":        { "modpart","dato","sprog","omfang" },
+  "scenarie":    "…",                       // Global.SelectedScenario
+  "provenance":  { "ScenarioID","ScenarioVersion","GeneratorVersion",
+                   "TrainerVersion","FeedbackVersion" },
+
+  "transcriptText": "…",                    // Global.TrainerTranscript (splittes på "Bruger:")
+
+  // TEKST-TILSTAND — de to halvdele orchestratoren allerede har splittet på [[VISMERE]]:
+  "feedbackMain":     "…",                  // Global.FeedbackMain
+  "feedbackExtended": "…",                  // Global.FeedbackExtended
+
+  "evaluering":  [ { "q","a" }, … ]         // fra Eval1..Eval7 ("spørgsmål\\nsvar")
+}
+
+// Struktureret tilstand (fuldt feltopdelt layout) understøttes stadig, hvis du
+// senere har rene felter: "feedback": { … }, "forankring": [ … ]. Se tidligere skema.`;
+</script>
+</body>
+</html>
