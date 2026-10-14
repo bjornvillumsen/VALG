@@ -3,7 +3,8 @@
   ------------------------------------------------------------------
   Funnel → metafor (vægtrum) → tillid + CTA.
   Sprog skiftes med knapperne øverst (DA / EN / NO). Dansk er standard.
-  Teams-linket sidder i "Start træning"-knappen (et <a href> i bookend-sektionen).
+  Knappen i bookend-sektionen er en mailto til Bjørn: VALG er i lukket pilot (okt 2026).
+  Firma og kontakt står i footeren.
 -->
 <!DOCTYPE html>
 <html lang="da">
@@ -201,6 +202,9 @@
   .bookend .gdpr{margin:6px 0 0;font-size:13px;color:#9a93a6;opacity:.85}
 
   footer{padding:34px 0 60px;color:var(--ink-soft);font-size:13px;letter-spacing:.04em}
+  footer p{margin:0 0 10px;line-height:1.7}
+  footer .foot-company{letter-spacing:.02em}
+  footer a{color:inherit}
 
   :focus-visible{outline:2px solid var(--honey-deep);outline-offset:3px}
   .bridge :focus-visible,.bookend :focus-visible{outline-color:var(--honey)}
@@ -485,16 +489,18 @@
   <div class="wrap reveal">
     <p class="loop" data-i18n="loop">Første gang ser du mønstret. Næste gang træner du med det.</p>
     <p class="tagline" data-i18n="foot_tag">Det lover dig ingenting. Det giver dig modstand.</p>
-    <!-- Teams-link. Skift adressen her, hvis agentens link ændrer sig. -->
+    <!-- Lukket pilot: knappen åbner en mail til Bjørn. -->
     <a class="btn btn-primary" id="start"
-       href="https://teams.microsoft.com/l/app/?titleId=T_b5e70388-0a7f-949a-c21e-e7365a639cb5"
-       target="_blank" rel="noopener" data-i18n="cta_label">Start træning</a>
-    <p class="teams" data-i18n="teams">Åbner i Microsoft Teams</p>
+       href="mailto:bvi@bjornvillumsen.dk?subject=VALG" data-i18n="cta_label">Skriv til os</a>
+    <p class="teams" data-i18n="teams">VALG er i en lukket pilot. Adgang kun med invitation.</p>
     <p class="gdpr" data-i18n="gdpr">Til sidst bliver du bedt om en kort evaluering — og du vælger selv, om dine svar gemmes.</p>
   </div>
 </section>
 
-<footer><div class="wrap" data-i18n="footer_micro">VALG · et træningsrum</div></footer>
+<footer><div class="wrap">
+  <p class="foot-micro" data-i18n="footer_micro">VALG · et træningsrum</p>
+  <p class="foot-company">Enkle løsninger · Enkel Holding ApS · CVR 39497034<br>Valdemarsgade 37, 1. th, 1665 København V, <span data-i18n="country">Danmark</span><br><span data-i18n="contact_label">Kontakt</span>: Bjørn Villumsen · <a href="mailto:bvi@bjornvillumsen.dk">bvi@bjornvillumsen.dk</a></p>
+</div></footer>
 
 <!-- PREVIEW MODAL -->
 <div class="vpreview-overlay" id="vpreview" hidden>
@@ -561,11 +567,11 @@
       trust_summary:"Hvad bygger det på?",
       trust_body:"VALG er ikke bare en chatbot, der finder på. Træningen bygger på et anerkendt psykologisk arbejde om, hvordan vi regulerer os selv i tætte relationer. Det kaldte psykologen David Schnarch <em>differentiering</em>: at blive ved med at være dig selv, også når en relation presser. Du behøver ikke kende teorien for at bruge VALG — den ligger under, ikke ovenpå.",
       foot_tag:"Det lover dig ingenting. Det giver dig modstand.",
-      cta_label:"Start træning",
+      cta_label:"Skriv til os",
       report_link:"Rapport",
-      teams:"Åbner i Microsoft Teams",
+      teams:"VALG er i en lukket pilot. Adgang kun med invitation.",
       gdpr:"Til sidst bliver du bedt om en kort evaluering — og du vælger selv, om dine svar gemmes.",
-      footer_micro:"VALG · et træningsrum",
+      footer_micro:"VALG · et træningsrum", country:"Danmark", contact_label:"Kontakt",
       steps_label:"Sådan foregår det",
       step_1:"Du beskriver kort en situation, hvor noget i en relation bliver ved med at ramme dig.",
       step_2:"VALG laver flere konkrete scenarier — du vælger det, der ligger tættest på.",
@@ -657,11 +663,11 @@
       trust_summary:"What is it built on?",
       trust_body:"VALG isn't just a chatbot making things up. The training builds on established psychological work about how we regulate ourselves in close relationships. The psychologist David Schnarch called it <em>differentiation</em>: staying yourself, even when a relationship pushes. You don't need to know the theory to use VALG — it sits underneath, not on top.",
       foot_tag:"It promises you nothing. It gives you resistance.",
-      cta_label:"Start training",
+      cta_label:"Contact us",
       report_link:"Report",
-      teams:"Opens in Microsoft Teams",
+      teams:"VALG is in a closed pilot. Access by invitation only.",
       gdpr:"At the end you're asked for a short evaluation — and you choose whether your answers are saved.",
-      footer_micro:"VALG · a training room",
+      footer_micro:"VALG · a training room", country:"Denmark", contact_label:"Contact",
       steps_label:"How it works",
       step_1:"You briefly describe a situation where something in a relationship keeps getting to you.",
       step_2:"VALG generates a few concrete scenarios — you pick the one closest to yours.",
@@ -753,11 +759,11 @@
       trust_summary:"Hva bygger det på?",
       trust_body:"VALG er ikke bare en chatbot som finner på. Treningen bygger på et anerkjent psykologisk arbeid om hvordan vi regulerer oss selv i nære relasjoner. Det kalte psykologen David Schnarch <em>differensiering</em>: å fortsette å være deg selv, også når en relasjon presser. Du trenger ikke kjenne teorien for å bruke VALG — den ligger under, ikke oppå.",
       foot_tag:"Det lover deg ingenting. Det gir deg motstand.",
-      cta_label:"Start trening",
+      cta_label:"Skriv til oss",
       report_link:"Rapport",
-      teams:"Åpner i Microsoft Teams",
+      teams:"VALG er i en lukket pilot. Tilgang kun med invitasjon.",
       gdpr:"Til slutt blir du bedt om en kort evaluering — og du velger selv om svarene dine lagres.",
-      footer_micro:"VALG · et treningsrom",
+      footer_micro:"VALG · et treningsrom", country:"Danmark", contact_label:"Kontakt",
       steps_label:"Slik foregår det",
       step_1:"Du beskriver kort en situasjon der noe i en relasjon fortsetter å ramme deg.",
       step_2:"VALG lager flere konkrete scenarier — du velger det som ligger nærmest.",
